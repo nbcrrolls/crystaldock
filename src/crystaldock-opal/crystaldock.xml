@@ -1,0 +1,222 @@
+<appConfig xmlns="http://nbcr.sdsc.edu/opal/types"
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata appName="Crystaldock 1.0.0">
+    <usage>
+        <![CDATA[CrystalDock is a computer algorithm that aids the computational identification of molecular 
+                 fragments predicted to bind a receptor pocket of interest.
+        ]]>
+    </usage>
+
+    <info xsd:type="xsd:string">
+    <![CDATA[
+CrystalDock  (Version 1.0.0)
+Usage: crystaldock.py -receptor_pdb_file receptor [options] 
+
+Required Options:
+  -receptor_pdb_file FILE    Receptor pdb file specifies receptor into which fragments will be docked.
+
+General options:
+  -user_specified_residue STRING  Residue is specified by the residue index, name, and chain, separated by underscores (i.e., 371_ARG_A)
+  -output_directory       VAL     Directory where the docking results will be written. Default ./
+  -pocket_center_x        FLOAT   The x-coordinate of a point specifying the location of the active site or active-site region of interest.
+  -pocket_center_y        FLOAT   The y-coordinate of a point specifying the location of the active site or active-site region of interest.
+  -pocket_center_z        FLOAT   The z-coordinate of a point specifying the location of the active site or active-site region of interest.
+  -pocket_radius          INT     An integer radius of a sphere, centered on the location coordinate above, that defines the receptor 
+                                  region surface that will be analyzed. Default is 5.
+  -filter_steps_one_and_two_tolerance       FLOAT  This parameter can be used to control the first two steps of the filter that eliminates 
+                                                   geometrically dissimilar microenvironments. See the source code for more details (default 
+                                                   2.0 angstroms).
+  -filter_step_three_CA_rmsd_cutoff         FLOAT  A preliminary fast RMSD alignment is performed using only the alpha carbons of the active-site 
+                                                   and database microenvironments to ensure that they are generally geometrically similar.  
+                                                   Specifies the maximum allowable RMS distance following alignment (default 2.5 angstroms).
+  -filter_step_four_side_chain_angle_cutoff FLOAT  Following the preliminary RMSD alignment, the program analyzes the angle between the 
+                                                   side chains of aligned residues. If any of these side chains are not generally pointing 
+                                                   in the same direction, the microenvironments are judged to be dissimilar. Specifies 
+                                                   the maximum allowable angle between aligned side chains (default 100.0 degrees).
+  -filter_step_five_rmsd_cutoff             FLOAT  A final, more rigorous RMSD alignment is performed using all the common heavy atoms of the 
+                                                   active-site and database microenvironments to ensure that they are geometrically similar. 
+                                                   Specifies the maximum allowable RMS distance following alignment (default 1.5 angstroms).
+  -filter_step_six_steric_clash_cutoff      FLOAT  A docked fragment is eliminated if it comes too close to a protein-receptor atom. 
+                                                   Specifies the minimum allowable distance (default 2.0 angstroms).
+  -use_microenvironments_of_3_residues      BOOL   By default, CrystalDock identifies receptor microenvironments containing three, four, 
+                                                   and five residues. If this flag is set to "FALSE", microenvironments of three residues 
+                                                   will not be considered (default TRUE).
+  -use_microenvironments_of_4_residues      BOOL   If this flag is set to "FALSE", microenvironments of four residues will not be considered
+                                                   (default TRUE).
+  -use_microenvironments_of_5_residues      BOOL   If this flag is set to "FALSE", microenvironments of five residues will not be considered
+                                                   (default TRUE).
+  -num_processors                           INT    The number of processors to use
+    ]]>
+    </info>
+
+    <types> 
+        <!-- list of tagged parameters -->
+        <taggedParams>
+            <param>
+                <id>receptor</id>
+                <tag>-receptor_pdb_file</tag>
+                <paramType>FILE</paramType>
+                <ioType>INPUT</ioType>
+                <required>true</required>  
+                <textDesc>Receptor PDB file</textDesc>
+            </param>
+
+            <param>
+                <id>residue</id>
+                <tag>-user_specified_residue</tag>
+                <paramType>STRING</paramType>
+                <required>false</required>  
+                <textDesc>Residue specified as index_name_chain (i.e. 371_ARG_A)</textDesc>
+            </param>
+
+            <param>
+                <id>centerX</id>
+                <tag>-pocket_center_x</tag>
+                <paramType>FLOAT</paramType>
+                <default>0.0</default>
+                <textDesc>X-coordinate of a point</textDesc>
+            </param>
+
+            <param>
+                <id>centerY</id>
+                <tag>-pocket_center_y</tag>
+                <paramType>FLOAT</paramType>
+                <default>0.0</default>
+                <textDesc>Y-coordinate of a point </textDesc>
+            </param>
+
+            <param>
+                <id>centerZ</id>
+                <tag>-pocket_center_z</tag>
+                <paramType>FLOAT</paramType>
+                <default>0.0</default>
+                <textDesc>Z-coordinate of a point </textDesc>
+            </param>
+
+            <param>
+                <id>radius</id>
+                <tag>-pocket_radius</tag>
+                <paramType>INT</paramType>
+                <default>5</default>
+                <textDesc>Sphere radius that defines the region of the receptor surface that will be analyzed </textDesc>
+            </param>
+
+            <param>
+                <id>filter12</id>
+                <tag>-filter_steps_one_and_two_tolerance</tag>
+                <paramType>FLOAT</paramType>
+                <default>2.0</default>
+                <textDesc>Step 1 and 2 filter control</textDesc> 
+            </param>
+
+            <param>
+                <id>filter3</id>
+                <tag>-filter_step_three_CA_rmsd_cutoff</tag>
+                <paramType>FLOAT</paramType>
+                <default>2.5</default>
+                <textDesc>Max allowable RMS distance following alignment </textDesc> 
+            </param>
+
+            <param>
+                <id>filter4</id>
+                <tag>-filter_step_four_side_chain_angle_cutoff</tag>
+                <paramType>FLOAT</paramType>
+                <default>100.0</default>
+                <textDesc>Max allowable angle between aligned side chains </textDesc> 
+            </param>
+
+            <param>
+                <id>filter5</id>
+                <tag>-filter_step_five_rmsd_cutoff</tag>
+                <paramType>FLOAT</paramType>
+                <default>1.5</default>
+                <textDesc>Max allowable RMS distance following alignment </textDesc> 
+            </param>
+
+            <param>
+                <id>filter6</id>
+                <tag>-filter_step_six_steric_clash_cutoff</tag>
+                <paramType>FLOAT</paramType>
+                <default>2.0</default>
+                <textDesc>Min allowable distance to a protein-receptor atom </textDesc> 
+            </param>
+
+            <param>
+                <id>use3residues</id>
+                <tag>-use_microenvironments_of_3_residues</tag>
+                <paramType>BOOL</paramType>
+                <default>TRUE</default>
+                <textDesc>Do not consider microenvironments of 3 residues </textDesc>
+            </param>
+
+            <param>
+                <id>use4residues</id>
+                <tag>-use_microenvironments_of_4_residues</tag>
+                <paramType>BOOL</paramType>
+                <default>TRUE</default>
+                <textDesc>Do not consider microenvironments of 4 residues </textDesc>
+            </param>
+
+            <param>
+                <id>use5residues</id>
+                <tag>-use_microenvironments_of_5_residues</tag>
+                <paramType>BOOL</paramType>
+                <default>TRUE</default>
+                <textDesc>Do not consider microenvironments of 5 residues </textDesc>
+            </param>
+
+            <param>
+                <id>numproc</id>
+                <tag>-num_processors</tag>
+                <paramType>INT</paramType>
+                <value>1</value>
+                <value>2</value>
+                <value>4</value>
+                <value>8</value>
+                <default>2</default>
+                <textDesc>Number of processors to use </textDesc>
+            </param>
+        </taggedParams>
+    
+        <groups>
+
+          <group>
+            <name>BasicInputGroup</name>
+            <elements>receptor</elements>
+            <required>true</required>
+            <textDesc>Required input </textDesc>
+          </group>
+
+          <group>
+            <name>PocketGroup</name>
+            <elements>centerX centerY centerZ radius </elements>
+            <textDesc>Active site of interest</textDesc>
+          </group>
+
+          <group>
+            <name>FilterGrouop</name>
+            <elements>filter12 filter3 filter4 filter5 filter6</elements>
+            <textDesc>Filters</textDesc>
+          </group>
+
+          <group>
+            <name>EnvResidueGroup</name>
+            <elements>residue use3residues use4residues use5residues</elements>
+            <textDesc>Residues</textDesc>
+          </group>
+
+          <group>
+            <name>ParallelGroup</name>
+            <elements>numproc</elements>
+            <textDesc>Parallel processing</textDesc>
+          </group>
+
+        </groups>
+
+    </types>
+
+  </metadata>
+
+  <binaryLocation>/opt/crystaldock/bin/crystaldock.sh</binaryLocation>
+     <parallel>false</parallel>
+</appConfig>

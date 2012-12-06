@@ -1,0 +1,43 @@
+<?xml version="1.0" standalone="no"?>
+
+<kickstart>
+
+
+	<description>
+	Your crystaldock roll description here
+	</description>
+
+	<copyright>
+	Copyright (c) 2000 - 2012 The Regents of the University of California.
+	All rights reserved. Rocks(r) v5.5/v6.0 www.rocksclusters.org
+	
+	</copyright>
+
+	<changelog>
+	$Log: crystaldock-opal.xml,v $
+	Revision 1.1  2012/12/06 01:31:36  nadya
+	initial
+	
+	</changelog>
+
+	<package>crystaldock-opal</package>
+
+<post>
+# deploy opal services
+
+if [ -d /opt/opal ]; then
+
+<file name="/opt/opal/deployed/deploy.sh" mode="append">
+# crystaldock v.1.0.0
+crystaldockver=1.0.0
+crystaldock_script=/opt/crystaldock/bin/crystaldock.sh
+if test -e $crystaldock_script; then
+    $ANT -f $OPALXML deploy -DserviceName=crystaldock_${crystaldockver} -DappConfig=$OPALCONFIG/crystaldock_${crystaldockver}.xml
+fi
+</file>
+
+fi
+
+</post>
+
+</kickstart>

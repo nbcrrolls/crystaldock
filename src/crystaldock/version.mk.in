@@ -1,0 +1,3 @@
+PKGROOT		= /opt/crystaldock
+NAME    	= crystaldock
+TARBALL_POSTFIX	= 
